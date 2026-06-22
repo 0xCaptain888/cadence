@@ -1,0 +1,36 @@
+[
+  { "id": "mf_aurora_skyline", "user": "u_washbot", "playedSeconds": 31, "trackDuration": 200, "client": "DSub", "artist": "Aurora Bloom", "title": "Skyline", "secondsAgo": 1500, "repeat": 24, "intervalSeconds": 40,
+    "_case": "6 — wash/sybil: 24 replays of one track in <1h; the per-hour cap lets the genuine early plays through, then the agent rejects the excess as wash-listening" },
+
+  { "id": "mf_gould_goldberg_aria", "user": "u_clara", "playedSeconds": 240, "trackDuration": 260, "client": "DSub", "artist": "Glenn Gould", "title": "Bach: Goldberg Variations, Aria", "secondsAgo": 300,
+    "_case": "1 — public-domain classical: Bach has no living rightsholder, so the composition share is reassigned to the performer Glenn Gould" },
+
+  { "id": "mf_radiohead_creep_live", "user": "u_theo", "playedSeconds": 250, "trackDuration": 255, "client": "play:sub", "artist": "Radiohead", "title": "Creep (Live at Glastonbury) [Audience Recording]", "secondsAgo": 280,
+    "_case": "2 — live bootleg: low confidence + unregistered performer -> escrow, flagged for review" },
+
+  { "id": "mf_now50_t07", "user": "u_mina", "playedSeconds": 200, "trackDuration": 203, "client": "Sonixd", "artist": "Various Artists", "title": "NOW 50 - Track 07", "secondsAgo": 260,
+    "_case": "3 — compilation: recover the real artist (Dua Lipa + writers + producer) behind the 'Various Artists' label" },
+
+  { "id": "mf_midnight_remix", "user": "u_theo", "playedSeconds": 190, "trackDuration": 240, "client": "DSub", "artist": "Solour", "title": "Midnight (Solour Remix)", "secondsAgo": 240,
+    "_case": "4 — remix lineage: 50% to remixer Solour (registered, paid) + 50% to the original Maya Lin Trio / J. Halloran (unregistered -> partial escrow)" },
+
+  { "id": "mf_unknown_hj", "user": "u_clara", "playedSeconds": 240, "trackDuration": 250, "client": "Symfonium", "artist": "beatles", "title": "hey jude", "secondsAgo": 220,
+    "_case": "5 — typo / no mbid: fuzzy-resolve 'beatles hey jude' -> canonical 'The Beatles — Hey Jude'" },
+
+  { "id": "mf_kwame_horizon", "user": "u_mina", "playedSeconds": 12, "trackDuration": 210, "client": "DSub", "artist": "Kwame Mensah", "title": "Horizon", "secondsAgo": 200,
+    "_case": "7 — skip: only 12s heard (< 30s floor) -> rejected, not a real listen" },
+
+  { "id": "mf_sofia_quartet_dawn", "user": "u_clara", "playedSeconds": 230, "trackDuration": 240, "client": "Symfonium", "artist": "Sofia Reyes Quartet", "title": "Dawn Chorus", "secondsAgo": 180,
+    "_case": "8 — long-tail no wallet: real mbid but no registered wallet -> escrowed against an ERC-8004 identity, claimable later" },
+
+  { "id": "mf_allstars_open_road", "user": "u_theo", "playedSeconds": 220, "trackDuration": 225, "client": "DSub", "artist": "Cadence Allstars", "title": "Open Road", "secondsAgo": 160,
+    "_case": "9 — clean multi-credit: performer + 2 writers + producer -> role-weighted 4-way split, fully settled" },
+
+  { "id": "mf_aurora_skyline", "user": "u_clara", "playedSeconds": 198, "trackDuration": 200, "client": "DSub", "artist": "Aurora Bloom", "title": "Skyline", "secondsAgo": 140, "repeat": 3, "intervalSeconds": 600 },
+  { "id": "mf_kwame_horizon", "user": "u_theo", "playedSeconds": 205, "trackDuration": 210, "client": "DSub", "artist": "Kwame Mensah", "title": "Horizon", "secondsAgo": 130, "repeat": 2, "intervalSeconds": 500 },
+  { "id": "mf_lena_riverlight", "user": "u_mina", "playedSeconds": 240, "trackDuration": 250, "client": "Symfonium", "artist": "Lena Ostergaard", "title": "Riverlight", "secondsAgo": 120, "repeat": 3, "intervalSeconds": 400 },
+  { "id": "mf_now50_t07", "user": "u_clara", "playedSeconds": 200, "trackDuration": 203, "client": "DSub", "artist": "Various Artists", "title": "NOW 50 - Track 07", "secondsAgo": 110 },
+  { "id": "mf_allstars_open_road", "user": "u_mina", "playedSeconds": 220, "trackDuration": 225, "client": "DSub", "artist": "Cadence Allstars", "title": "Open Road", "secondsAgo": 100 },
+  { "id": "mf_lena_riverlight", "user": "u_theo", "playedSeconds": 245, "trackDuration": 250, "client": "DSub", "artist": "Lena Ostergaard", "title": "Riverlight", "secondsAgo": 90 },
+  { "id": "mf_kwame_horizon", "user": "u_clara", "playedSeconds": 208, "trackDuration": 210, "client": "DSub", "artist": "Kwame Mensah", "title": "Horizon", "secondsAgo": 80 }
+]

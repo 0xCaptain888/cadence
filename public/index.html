@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadence — autonomous music royalties</title>
+  <meta name="description" content="Every listen, attributed and settled to the right artists in USDC nanopayments. An autonomous agent decides who gets paid, how to split it, and whether the play was real." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B0E14'/%3E%3Cpath d='M9 21V11M9 11c4-4 9 4 13 0' stroke='%23C8A24B' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='9' cy='21' r='2.4' fill='%235BC8A0'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <div class="brand">
+      <svg class="brandmark" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M5 23V9M5 9c5-5 11 5 16 0" stroke="var(--gold)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <circle cx="5" cy="23" r="2.6" fill="var(--teal)"/>
+        <circle cx="26" cy="9.5" r="2.6" fill="var(--gold)"/>
+      </svg>
+      <div class="brand-text">
+        <h1>CADENCE</h1>
+        <p class="tagline">Every listen, settled to the artist who earned it.</p>
+      </div>
+    </div>
+
+    <div class="masthead-right">
+      <span class="mode-badge" id="modeBadge" title="settlement mode">
+        <span class="dot"></span><span id="modeLabel">connecting…</span>
+      </span>
+      <button class="run-btn" id="runBtn" type="button">
+        <span class="run-btn-glyph">▷</span> Run simulation
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- thesis row: the ledger totals, in coin -->
+    <section class="kpis" aria-label="settlement totals">
+      <article class="kpi kpi-paid">
+        <span class="kpi-label">Paid to artists</span>
+        <span class="kpi-value mono"><span class="unit">$</span><span id="kpiPaid">0.000000</span></span>
+        <span class="kpi-sub"><span id="kpiSettled">0</span> plays settled</span>
+      </article>
+      <article class="kpi kpi-escrow">
+        <span class="kpi-label">Held in escrow</span>
+        <span class="kpi-value mono"><span class="unit">$</span><span id="kpiEscrow">0.000000</span></span>
+        <span class="kpi-sub"><span id="kpiEscrowOpen">0</span> artists awaiting a wallet</span>
+      </article>
+      <article class="kpi kpi-reject">
+        <span class="kpi-label">Withheld</span>
+        <span class="kpi-value mono"><span id="kpiRejected">0</span></span>
+        <span class="kpi-sub">plays the agent refused to pay</span>
+      </article>
+      <article class="kpi">
+        <span class="kpi-label">Artists reached</span>
+        <span class="kpi-value mono" id="kpiArtists">0</span>
+        <span class="kpi-sub"><span id="kpiUsers">0</span> listeners · <span id="kpiBatches">0</span> batches</span>
+      </article>
+    </section>
+
+    <section class="trend" aria-label="settlement over time">
+      <div class="trend-head">
+        <span class="eyebrow">settlement tape</span>
+        <span class="trend-meta mono" id="trendMeta">awaiting plays</span>
+      </div>
+      <div class="spark" id="spark"></div>
+    </section>
+
+    <div class="grid">
+      <!-- SIGNATURE: the decision tape -->
+      <section class="panel tape-panel" aria-label="agent decisions">
+        <div class="panel-head">
+          <h2>Decision tape</h2>
+          <p class="panel-note">Each row is one autonomous ruling. Open it to read the agent's reasoning, step by step.</p>
+        </div>
+        <ol class="tape" id="tape">
+          <li class="tape-empty" id="tapeEmpty">
+            No plays yet. Hit <strong>Run simulation</strong> to replay a day of listening — classical, a bootleg, a remix, a compilation, a typo, a wash-trading bot — and watch the agent rule on each one.
+          </li>
+        </ol>
+      </section>
+
+      <aside class="side">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Where the money went</h2>
+            <p class="panel-note">Top earners this session.</p>
+          </div>
+          <ol class="ranks" id="ranks">
+            <li class="ranks-empty">No payouts yet.</li>
+          </ol>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Escrow desk</h2>
+            <p class="panel-note">Royalties held for artists with no wallet on file. Claimable via an ERC-8004 identity proof — gated by x402.</p>
+          </div>
+          <ul class="escrow" id="escrow">
+            <li class="escrow-empty">Nothing in escrow.</li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <span class="eyebrow">portable settlement core</span>
+      <p>The attribution-and-settlement engine is source-agnostic. It pays music from Subsonic / Navidrome today; the same core has adapters drafted for live audio (Owncast) and reshares (Mastodon / ActivityPub). Build once, distribute three ways.</p>
+    </div>
+    <div class="colophon-meta mono">
+      <span id="footMode">mock</span> · USDC nanopayments on Arc · Circle Gateway · x402 · ERC-8004
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

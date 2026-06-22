@@ -1,0 +1,18 @@
+# runtime state written by the in-memory store
+/.data/
+data/state.json
+
+# dependencies (the app needs none to run in MOCK mode)
+node_modules/
+
+# secrets — never commit a real one
+.env
+.env.local
+
+# build / editor noise
+.next/
+dist/
+*.log
+.DS_Store
+.vscode/
+.idea/

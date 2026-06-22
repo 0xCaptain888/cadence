@@ -1,0 +1,123 @@
+{
+  "byId": {
+    "mf_gould_goldberg_aria": {
+      "title": "Bach: Goldberg Variations, BWV 988 — Aria",
+      "artist": "Glenn Gould",
+      "mbid": "mbid-gould-goldberg-aria",
+      "releaseType": "classical",
+      "isLive": false, "isCompilation": false, "isRemix": false,
+      "credits": [
+        { "name": "Glenn Gould", "role": "performer", "mbid": "mbid-glenn-gould" },
+        { "name": "Johann Sebastian Bach", "role": "writer", "mbid": "mbid-js-bach" }
+      ]
+    },
+    "mf_radiohead_creep_live": {
+      "title": "Creep (Live at Glastonbury) [Audience Recording]",
+      "artist": "Radiohead",
+      "mbid": null,
+      "releaseType": "live",
+      "isLive": true, "isCompilation": false, "isRemix": false,
+      "credits": [
+        { "name": "Radiohead", "role": "performer", "mbid": "mbid-radiohead" }
+      ]
+    },
+    "mf_now50_t07": {
+      "title": "Levitating",
+      "artist": "Various Artists",
+      "mbid": null,
+      "releaseType": "compilation",
+      "isLive": false, "isCompilation": true, "isRemix": false,
+      "credits": [
+        { "name": "Dua Lipa", "role": "performer", "mbid": "mbid-dua-lipa" },
+        { "name": "Clarence Coffee Jr.", "role": "writer", "mbid": "mbid-ccj" },
+        { "name": "Sarah Hudson", "role": "writer", "mbid": "mbid-shudson" },
+        { "name": "Stephen Kozmeniuk", "role": "producer", "mbid": "mbid-koz" }
+      ]
+    },
+    "mf_midnight_remix": {
+      "title": "Midnight (Solour Remix)",
+      "artist": "Solour",
+      "mbid": "mbid-midnight-remix",
+      "releaseType": "single",
+      "isLive": false, "isCompilation": false, "isRemix": true,
+      "credits": [
+        { "name": "Solour", "role": "performer", "mbid": "mbid-solour" }
+      ],
+      "original": {
+        "artist": "Maya Lin Trio",
+        "credits": [
+          { "name": "Maya Lin Trio", "role": "performer", "mbid": "mbid-maya-lin-trio" },
+          { "name": "J. Halloran", "role": "writer", "mbid": "mbid-jhalloran" }
+        ]
+      }
+    },
+    "mf_sofia_quartet_dawn": {
+      "title": "Dawn Chorus",
+      "artist": "Sofia Reyes Quartet",
+      "mbid": "mbid-sofia-reyes-quartet",
+      "releaseType": "album",
+      "isLive": false, "isCompilation": false, "isRemix": false,
+      "credits": [
+        { "name": "Sofia Reyes Quartet", "role": "performer", "mbid": "mbid-sofia-reyes-quartet" }
+      ]
+    },
+    "mf_allstars_open_road": {
+      "title": "Open Road",
+      "artist": "Cadence Allstars",
+      "mbid": "mbid-cadence-allstars-open-road",
+      "releaseType": "album",
+      "isLive": false, "isCompilation": false, "isRemix": false,
+      "credits": [
+        { "name": "Cadence Allstars", "role": "performer", "mbid": "mbid-cadence-allstars" },
+        { "name": "A. Penrose", "role": "writer", "mbid": "mbid-apenrose" },
+        { "name": "M. Okafor", "role": "writer", "mbid": "mbid-mokafor" },
+        { "name": "R. Lindqvist", "role": "producer", "mbid": "mbid-rlindqvist" }
+      ]
+    },
+    "mf_aurora_skyline": {
+      "title": "Skyline",
+      "artist": "Aurora Bloom",
+      "mbid": "mbid-aurora-skyline",
+      "releaseType": "album",
+      "isLive": false, "isCompilation": false, "isRemix": false,
+      "credits": [
+        { "name": "Aurora Bloom", "role": "performer", "mbid": "mbid-aurora-bloom" },
+        { "name": "Aurora Bloom", "role": "writer", "mbid": "mbid-aurora-bloom" }
+      ]
+    },
+    "mf_kwame_horizon": {
+      "title": "Horizon",
+      "artist": "Kwame Mensah",
+      "mbid": "mbid-kwame-horizon",
+      "releaseType": "single",
+      "isLive": false, "isCompilation": false, "isRemix": false,
+      "credits": [
+        { "name": "Kwame Mensah", "role": "performer", "mbid": "mbid-kwame-mensah" },
+        { "name": "T. Boateng", "role": "producer", "mbid": "mbid-tboateng" }
+      ]
+    },
+    "mf_lena_riverlight": {
+      "title": "Riverlight",
+      "artist": "Lena Ostergaard",
+      "mbid": "mbid-lena-riverlight",
+      "releaseType": "album",
+      "isLive": false, "isCompilation": false, "isRemix": false,
+      "credits": [
+        { "name": "Lena Ostergaard", "role": "performer", "mbid": "mbid-lena-ostergaard" },
+        { "name": "P. Nylund", "role": "writer", "mbid": "mbid-pnylund" }
+      ]
+    }
+  },
+  "byKey": {
+    "the beatles::hey jude": {
+      "title": "Hey Jude",
+      "artist": "The Beatles",
+      "mbid": "mbid-beatles-hey-jude",
+      "releaseType": "single",
+      "isLive": false, "isCompilation": false, "isRemix": false,
+      "credits": [
+        { "name": "The Beatles", "role": "performer", "mbid": "mbid-the-beatles" }
+      ]
+    }
+  }
+}

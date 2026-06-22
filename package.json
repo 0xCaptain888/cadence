@@ -1,0 +1,34 @@
+{
+  "name": "cadence",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An autonomous royalty-settlement agent for self-hosted music. Every listen is attributed, weighed for genuine attention, and settled to the right artists in USDC nanopayments on Arc.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "verify": "node scripts/verify-core.mjs",
+    "simulate": "node scripts/simulate-plays.mjs"
+  },
+  "keywords": [
+    "usdc",
+    "nanopayments",
+    "circle",
+    "arc",
+    "x402",
+    "erc-8004",
+    "royalties",
+    "music",
+    "subsonic",
+    "navidrome",
+    "agent"
+  ],
+  "license": "MIT",
+  "dependencies": {},
+  "optionalDependencies": {
+    "viem": "^2.21.0"
+  }
+}

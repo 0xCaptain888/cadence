@@ -1,0 +1,21 @@
+{
+  "_comment": "MusicBrainz-keyed payee registry. Artists WITHOUT a wallet are intentionally omitted to demonstrate escrow + ERC-8004 claim (e.g. Radiohead live bootleg, the remix original 'Maya Lin Trio'/'J. Halloran', and the indie 'Sofia Reyes Quartet').",
+  "artists": {
+    "mbid-glenn-gould": { "name": "Glenn Gould", "wallet": "0x1111111111111111111111111111111111110001", "currency": "USDC", "erc8004": { "claimed": true, "agentId": "agent-gould-estate" } },
+    "mbid-dua-lipa": { "name": "Dua Lipa", "wallet": "0x1111111111111111111111111111111111110002", "currency": "USDC", "erc8004": { "claimed": true, "agentId": "agent-dualipa" } },
+    "mbid-ccj": { "name": "Clarence Coffee Jr.", "wallet": "0x1111111111111111111111111111111111110003", "currency": "USDC" },
+    "mbid-shudson": { "name": "Sarah Hudson", "wallet": "0x1111111111111111111111111111111111110004", "currency": "USDC" },
+    "mbid-koz": { "name": "Stephen Kozmeniuk", "wallet": "0x1111111111111111111111111111111111110005", "currency": "USDC" },
+    "mbid-solour": { "name": "Solour", "aliases": ["DJ Solour"], "wallet": "0x1111111111111111111111111111111111110006", "currency": "USDC", "erc8004": { "claimed": true, "agentId": "agent-solour" } },
+    "mbid-the-beatles": { "name": "The Beatles", "wallet": "0x1111111111111111111111111111111111110007", "currency": "USDC" },
+    "mbid-cadence-allstars": { "name": "Cadence Allstars", "wallet": "0x1111111111111111111111111111111111110008", "currency": "USDC" },
+    "mbid-apenrose": { "name": "A. Penrose", "wallet": "0x1111111111111111111111111111111111110009", "currency": "USDC" },
+    "mbid-mokafor": { "name": "M. Okafor", "wallet": "0x111111111111111111111111111111111111000a", "currency": "USDC" },
+    "mbid-rlindqvist": { "name": "R. Lindqvist", "wallet": "0x111111111111111111111111111111111111000b", "currency": "USDC" },
+    "mbid-aurora-bloom": { "name": "Aurora Bloom", "wallet": "0x111111111111111111111111111111111111000c", "currency": "USDC", "erc8004": { "claimed": true, "agentId": "agent-aurora" } },
+    "mbid-kwame-mensah": { "name": "Kwame Mensah", "wallet": "0x111111111111111111111111111111111111000d", "currency": "USDC" },
+    "mbid-tboateng": { "name": "T. Boateng", "wallet": "0x111111111111111111111111111111111111000e", "currency": "USDC" },
+    "mbid-lena-ostergaard": { "name": "Lena Ostergaard", "wallet": "0x111111111111111111111111111111111111000f", "currency": "USDC" },
+    "mbid-pnylund": { "name": "P. Nylund", "wallet": "0x1111111111111111111111111111111111110010", "currency": "USDC" }
+  }
+}
