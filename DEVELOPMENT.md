@@ -146,8 +146,11 @@ LIVE 全链路已接好且由环境变量门控。仓库默认 MOCK 让评委即
 - **D2**：建仓库推 GitHub；干净环境复测。✅ 完成（https://github.com/0xCaptain888/cadence）
 - **D3**：Arc 测试网 LIVE：部署 `CadenceSplitterArc`、填 `.env`、跑真实结算。✅ 完成
   - 合约部署：`0x5bf261603745b2b5d541e7face3020cdfd59f011`
-  - 44 次播放处理：37 settled ($0.074)、2 escrowed、5 rejected
-  - 艺人钱包收到真实 USDC
+  - 49 次播放处理（2 批次）：42 settled ($0.095)、2 escrowed ($0.005)、5 rejected
+  - 链上验证（实时数据）：
+    - 合约余额：1.005 USDC（含 0.005 托管）
+    - 艺人钱包 `0xe6aa...3925`：+0.081348 USDC
+    - 创作者钱包 `0xe00d...6fbf`：+0.013652 USDC
 - **D4**：把真实测试网交易接进仪表盘展示（LIVE 徽章 + 真实 txHash 链接）。**← 待做**
 - **D5**：录 <3 分钟视频（脚本见 §11）；打磨 README 首屏与截图。**← 待做**
 - **D6**：第一次正式提交（占位 + 现有完成度）。✅ 已提交

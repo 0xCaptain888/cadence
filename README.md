@@ -121,29 +121,39 @@ click around immediately; flip `CADENCE_SETTLEMENT_MODE=real` with the keys in
 
 ## Live settlement proof (Arc Testnet)
 
-Cadence has completed a full LIVE settlement on Arc Testnet:
+Cadence has completed a full LIVE settlement on Arc Testnet with **real USDC flowing on-chain**:
 
 ```
-44 plays processed
-37 settled   → $0.074000 paid to artists on-chain
+49 plays processed (2 batches)
+42 settled   → $0.095000 paid to artists on-chain
 2  escrowed  → $0.005000 held (Radiohead, Sofia Reyes Quartet — no wallets)
 5  rejected  → 4 wash-trading + 1 skip detected and withheld
 
-18 artists · 4 listeners · 39 batches
+18 artists · 4 listeners · 44 batches
 ```
 
-**On-chain evidence:**
-- Contract: [`0x5bf261...f011`](https://testnet.arcscan.app/address/0x5bf261603745b2b5d541e7face3020cdfd59f011)
-- Deploy tx: [`0xe77ef8...7304`](https://testnet.arcscan.app/tx/0xe77ef82c97726f8154dd4bef9e9116b5b67f1ae79db8d277ee5b52a5116c7304)
-- Fund tx: [`0x2ba0b7...811`](https://testnet.arcscan.app/tx/0x2ba0b7e7814f7a9e299b71d0379dfd14bb90b435bc43603cf829cc15afe7c811)
-- Sample settlement txs:
-  [1](https://testnet.arcscan.app/tx/0x7d34e6a5c3a139f3f387b309966212c7540442cd32c0029798522b3a74fcb0e7)
-  [2](https://testnet.arcscan.app/tx/0xcaf301b8ca84eb5ad3e868e92eee68f393181153ff7f93b28efcedbb33ef7b99)
-  [3](https://testnet.arcscan.app/tx/0x0654ab5dd267978cf765b9adcaf9ac66c70b87fdd5726b8d1f7ee735041193b5)
+**On-chain verification (live data):**
 
-Artist wallets received real USDC:
-- Wallet `0xe6aa...3925`: +$0.081 (Glenn Gould, Dua Lipa, The Beatles, Aurora Bloom, Lena Ostergaard, Cadence Allstars)
-- Wallet `0xe00d...6fbf`: +$0.014 (Solour, Kwame Mensah, writers, producers)
+| Address | Balance | Role |
+|---------|---------|------|
+| [`0x5bf261...f011`](https://testnet.arcscan.app/address/0x5bf261603745b2b5d541e7face3020cdfd59f011) | 1.005 USDC | CadenceSplitterArc contract (includes 0.005 escrowed) |
+| [`0xe6aa...3925`](https://testnet.arcscan.app/address/0xe6aa96b9f9bfeb83034d151c5a83ac3b75143925) | 20.081 USDC | Artist wallet (+0.081 received) |
+| [`0xe00d...6fbf`](https://testnet.arcscan.app/address/0xe00dd9ac9c239b22f2fd6ca40e1d32b6d9316fbf) | 20.014 USDC | Writer/producer wallet (+0.014 received) |
+| [`0x149b...127b`](https://testnet.arcscan.app/address/0x149b2a64369976fde0192f42b6d4a6bdba18127b) | 18.807 USDC | Operator wallet |
+
+**Transaction evidence:**
+- Contract deployment: [`0xe77ef8...7304`](https://testnet.arcscan.app/tx/0xe77ef82c97726f8154dd4bef9e9116b5b67f1ae79db8d277ee5b52a5116c7304)
+- Contract funding (1 USDC): [`0x2ba0b7...811`](https://testnet.arcscan.app/tx/0x2ba0b7e7814f7a9e299b71d0379dfd14bb90b435bc43603cf829cc15afe7c811)
+- Sample settlement transactions:
+  - [`0x7d34e6...`](https://testnet.arcscan.app/tx/0x7d34e6a5c3a139f3f387b309966212c7540442cd32c0029798522b3a74fcb0e7)
+  - [`0xcaf301...`](https://testnet.arcscan.app/tx/0xcaf301b8ca84eb5ad3e868e92eee68f393181153ff7f93b28efcedbb33ef7b99)
+  - [`0x0654ab...`](https://testnet.arcscan.app/tx/0x0654ab5dd267978cf765b9adcaf9ac66c70b87fdd5726b8d1f7ee735041193b5)
+
+**Artist payouts (verified on-chain):**
+- Wallet `0xe6aa...3925`: +$0.081348 USDC
+  - Glenn Gould, Dua Lipa, The Beatles, Aurora Bloom, Lena Ostergaard, Cadence Allstars
+- Wallet `0xe00d...6fbf`: +$0.013652 USDC
+  - Solour, Kwame Mensah, Clarence Coffee Jr., Sarah Hudson, Stephen Kozmeniuk, A. Penrose, M. Okafor, R. Lindqvist, T. Boateng, P. Nylund
 
 ## Build once, distribute three ways
 
