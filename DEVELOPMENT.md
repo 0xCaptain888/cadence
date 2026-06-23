@@ -140,14 +140,17 @@ LIVE 全链路已接好且由环境变量门控。仓库默认 MOCK 让评委即
 
 ## 9. 8 天冲刺计划（窗口 6/15–6/29）
 
-> 今天约 6/21，约剩 8 天。核心已跑通（`npm run verify` 26/26）。
+> 今天约 6/22。核心已跑通（`npm run verify` 26/26）。LIVE 模式已在 Arc 测试网完成真实结算。
 
-- **D1（今天）**：完成全部剩余文件（server、仪表盘、脚本、合约、文档三件套）；本地起服务 curl 全端点；导入图查漏 ≥2 次；打包 zip。**← 当前**
-- **D2**：建仓库推 GitHub；在干净环境（仅 Node 18+）复测 `npm start` / `npm run verify` / `npm run simulate`；修一切首次点击问题。
-- **D3**：准备 Arc 测试网 LIVE：申请测试网 USDC、部署 `CadenceSplitter`、填 `.env`、跑一次真实结算并截图/录屏。
-- **D4**：把真实测试网交易接进仪表盘展示（LIVE 徽章 + 真实 txHash 链接）。
-- **D5**：录 <3 分钟视频（脚本见 §11）；打磨 README 首屏与截图。
-- **D6**：第一次正式提交（占位 + 现有完成度）。
+- **D1**：完成全部文件（server、仪表盘、脚本、合约、文档三件套）；打包 zip。✅ 完成
+- **D2**：建仓库推 GitHub；干净环境复测。✅ 完成（https://github.com/0xCaptain888/cadence）
+- **D3**：Arc 测试网 LIVE：部署 `CadenceSplitterArc`、填 `.env`、跑真实结算。✅ 完成
+  - 合约部署：`0x5bf261603745b2b5d541e7face3020cdfd59f011`
+  - 44 次播放处理：37 settled ($0.074)、2 escrowed、5 rejected
+  - 艺人钱包收到真实 USDC
+- **D4**：把真实测试网交易接进仪表盘展示（LIVE 徽章 + 真实 txHash 链接）。**← 待做**
+- **D5**：录 <3 分钟视频（脚本见 §11）；打磨 README 首屏与截图。**← 待做**
+- **D6**：第一次正式提交（占位 + 现有完成度）。✅ 已提交
 - **D7**：迭代——按自查清单补齐细节，扩 seed 真实播放量，强化 Top earners/escrow 演示。
 - **D8**：终版提交；最后一次全链路冒烟；提交前再看一眼"自查清单"。
 
@@ -155,13 +158,15 @@ LIVE 全链路已接好且由环境变量门控。仓库默认 MOCK 让评委即
 
 ## 10. 提交清单（Definition of Done）
 
-- [ ] 公开 **GitHub 仓库**，README 首屏 3 秒讲清"是什么 + 为何不同 + 怎么跑"。
-- [ ] 干净环境 `npm start` 一次成功；`npm run verify` 全绿；`npm run simulate` 有动画。
+- [x] 公开 **GitHub 仓库**，README 首屏 3 秒讲清"是什么 + 为何不同 + 怎么跑"。
+- [x] 干净环境 `npm start` 一次成功；`npm run verify` 全绿；`npm run simulate` 有动画。
 - [ ] **<3 分钟视频**：先放产品（点 Run simulation 展示决策带），再点开一条推理链，再讲货币模型与 Circle 用量，最后讲可移植性。
-- [ ] 赛程窗口内**真实测试网 USDC 结算**记录（截图/交易哈希/录屏）。
-- [ ] Circle 五件套在代码里可指认（Gateway / 钱包 / x402 / ERC-8004 / USDC）。
-- [ ] 三份文档齐全：README（英）、DEVELOPMENT（中）、PREREQUISITES（中），且同时存在于仓库内。
-- [ ] 合约可读可审计（solc 0.8.24+ 可编译），并说明非演示必需。
+- [x] 赛程窗口内**真实测试网 USDC 结算**记录（截图/交易哈希/录屏）。
+  - 合约：https://testnet.arcscan.app/address/0x5bf261603745b2b5d541e7face3020cdfd59f011
+  - 结算交易：https://testnet.arcscan.app/tx/0x7d34e6a5c3a139f3f387b309966212c7540442cd32c0029798522b3a74fcb0e7 等 37 笔
+- [x] Circle 五件套在代码里可指认（Gateway / 钱包 / x402 / ERC-8004 / USDC）。
+- [x] 三份文档齐全：README（英）、DEVELOPMENT（中）、PREREQUISITES（中），且同时存在于仓库内。
+- [x] 合约可读可审计（solc 0.8.24+ 可编译），并说明非演示必需。
 - [ ] 找一找彩蛋（$2k）。
 
 ---
@@ -180,8 +185,16 @@ LIVE 全链路已接好且由环境变量门控。仓库默认 MOCK 让评委即
 ## 12. 从 MOCK 切到 LIVE（速查）
 
 1. 按 `.env.example` 复制为 `.env`，设 `CADENCE_SETTLEMENT_MODE=real`。
-2. 填 `CADENCE_RPC_URL`、`CADENCE_CHAIN_ID`、`CADENCE_USDC_ADDRESS`、`CADENCE_OPERATOR_PRIVATE_KEY`、`CIRCLE_API_KEY`（必要时 `CIRCLE_GATEWAY_URL`）。
-3. 部署 `contracts/CadenceSplitter.sol`，设 `CADENCE_SPLITTER_ADDRESS`，向合约注资测试网 USDC。
-4. `npm i`（让 optional 的 `viem` 落地），`npm start`，跑一次结算，核对链上交易与账本一致。
+2. 填 `CADENCE_RPC_URL`（Arc 测试网 RPC）、`CADENCE_CHAIN_ID=5042002`、`CADENCE_USDC_ADDRESS=native`、`CADENCE_OPERATOR_PRIVATE_KEY`、`ERC8004_REGISTRY`。
+3. 安装依赖：`npm install`（让 optional 的 `viem` 和 dev 的 `solc` 落地）。
+4. 部署合约：`npm run deploy`（编译 `CadenceSplitterArc.sol` 并部署到 Arc 测试网）。
+5. 注资合约：`npm run fund`（向合约发送 USDC 以支持结算）。
+6. 把返回的合约地址填入 `.env` 的 `CADENCE_SPLITTER_ADDRESS`。
+7. `npm run live-full`（跑完整 seed 的 LIVE 结算），核对链上交易与账本一致。
 
 > 详细准备（钱包、领水、key、账户）见 **PREREQUISITES.md**。
+>
+> **已完成部署**：
+> - 合约地址：`0x5bf261603745b2b5d541e7face3020cdfd59f011`
+> - ERC-8004 IdentityRegistry：`0x8004A818BFB912233c491871b3d84c89A494BD9e`
+> - 结算结果：44 plays → 37 settled ($0.074) + 2 escrowed ($0.005) + 5 rejected
