@@ -52,7 +52,9 @@ the agent never gets stuck. With no key, it is fully deterministic and offline.
 
 ## 30-second quickstart
 
-No install. No build. No API keys. No wallet.
+**Try it online (no install required):** https://8dfn5lh6.mule.page/
+
+Or run locally:
 
 ```bash
 npm start
