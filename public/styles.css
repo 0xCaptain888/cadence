@@ -297,6 +297,13 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 24px 8px; }
   .row.open .trace { grid-template-rows: 1fr; }
 }
 
+/* ── tx link ──────────────────────────────────────────────────────────── */
+.tx-link {
+  color: var(--accent); text-decoration: none; font-family: var(--mono);
+  border-bottom: 1px dotted var(--accent-dim);
+}
+.tx-link:hover { border-bottom-style: solid; }
+
 /* ── responsive ───────────────────────────────────────────────────────── */
 @media (max-width: 920px) {
   .grid { grid-template-columns: 1fr; }

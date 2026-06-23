@@ -107,6 +107,8 @@ export function summarize() {
     minPlaySeconds: config.minPlaySeconds,
     llmBackend: config.hasAnthropicKey ? 'anthropic' : 'deterministic',
     musicbrainz: config.musicbrainzLive ? 'live' : 'bundled-cache',
+    splitterAddress: config.splitterAddress || null,
+    explorerBase: config.chainId === 5042002 ? 'https://testnet.arcscan.app' : null,
   };
 }
 

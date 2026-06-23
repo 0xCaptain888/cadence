@@ -23,6 +23,15 @@ function renderStats(stats) {
     badge.classList.toggle('live', live);
     $('modeLabel').textContent = config.modeLabel || (live ? 'LIVE' : 'MOCK');
     $('footMode').textContent = live ? 'live · arc testnet' : 'mock · deterministic';
+    // Show contract address in LIVE mode
+    if (live && config.splitterAddress) {
+      const contractInfo = document.getElementById('contractInfo');
+      if (contractInfo) {
+        const explorerBase = config.explorerBase || 'https://testnet.arcscan.app';
+        contractInfo.innerHTML = `Contract: <a href="${explorerBase}/address/${config.splitterAddress}" target="_blank" rel="noopener" class="tx-link">${config.splitterAddress.slice(0, 8)}...${config.splitterAddress.slice(-4)}</a>`;
+        contractInfo.style.display = '';
+      }
+    }
   }
 
   if (metrics) {
@@ -140,7 +149,11 @@ function decisionRow(d) {
   const payouts = (d.payees || []).length
     ? `<div class="payout-table">${d.payees.map(payoutRow).join('')}</div>` : '';
   const tx = d.txHash
-    ? `<div class="tx-line"><b>batch</b> ${esc(d.batchId || '—')} &nbsp; <b>tx</b> ${esc(d.txHash)}</div>` : '';
+    ? `<div class="tx-line"><b>batch</b> ${esc(d.batchId || '—')} &nbsp; <b>tx</b> ${
+        d.txHash.length > 20
+          ? `<a href="https://testnet.arcscan.app/tx/${esc(d.txHash)}" target="_blank" rel="noopener" class="tx-link">${esc(d.txHash.slice(0, 18))}...</a>`
+          : esc(d.txHash)
+      }</div>` : '';
 
   const li = document.createElement('li');
   li.className = `row row-${v}`;
