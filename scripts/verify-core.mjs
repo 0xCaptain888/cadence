@@ -15,8 +15,14 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
-import { processPlay, reset, getMetrics, modeLabel } from '../src/core/index.js';
-import { expandSeed } from '../src/core/seedExpand.js';
+// Force MOCK mode for verification — the verify script proves the brain works
+// without any chain/network dependency, regardless of .env settings.
+// Must be set BEFORE any core imports (ESM hoists static imports).
+process.env.CADENCE_SETTLEMENT_MODE = 'mock';
+delete process.env.CADENCE_SPLITTER_ADDRESS;
+
+const { processPlay, reset, getMetrics, modeLabel } = await import('../src/core/index.js');
+const { expandSeed } = await import('../src/core/seedExpand.js');
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const seed = JSON.parse(readFileSync(join(__dirname, '..', 'data', 'seed-plays.json'), 'utf8'));

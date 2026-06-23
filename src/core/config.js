@@ -7,6 +7,26 @@
 // supplies real credentials.
 // -----------------------------------------------------------------------------
 
+import { readFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+// ── Load .env if present (zero-dep, no dotenv needed) ────────────────────────
+const __configDir = dirname(fileURLToPath(import.meta.url));
+const __envPath = join(__configDir, '..', '..', '.env');
+if (existsSync(__envPath)) {
+  const env = readFileSync(__envPath, 'utf8');
+  for (const line of env.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eq = trimmed.indexOf('=');
+    if (eq === -1) continue;
+    const key = trimmed.slice(0, eq);
+    const val = trimmed.slice(eq + 1);
+    if (val && !process.env[key]) process.env[key] = val;
+  }
+}
+
 function num(name, fallback) {
   const v = process.env[name];
   if (v === undefined || v === '') return fallback;
@@ -64,6 +84,9 @@ export const config = {
   operatorKey:       str('CADENCE_OPERATOR_PRIVATE_KEY', ''),
   circleApiKey:      str('CIRCLE_API_KEY', ''),
   circleGatewayUrl:  str('CIRCLE_GATEWAY_URL', 'https://api.circle.com/v1/w3s/gateway'),
+  identityRegistry:  str('ERC8004_REGISTRY', ''),
+  // Arc Testnet uses native USDC (no separate ERC-20 token)
+  nativeUsdc:        str('CADENCE_USDC_ADDRESS', '').toLowerCase() === 'native',
 
   // ---- server --------------------------------------------------------------
   port: num('PORT', 3000),

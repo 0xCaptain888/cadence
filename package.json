@@ -11,7 +11,11 @@
     "start": "node server.mjs",
     "dev": "node server.mjs",
     "verify": "node scripts/verify-core.mjs",
-    "simulate": "node scripts/simulate-plays.mjs"
+    "simulate": "node scripts/simulate-plays.mjs",
+    "deploy": "node scripts/deploy.mjs",
+    "fund": "node scripts/fund-contract.mjs",
+    "live-settle": "node scripts/live-settle.mjs",
+    "live-full": "node scripts/live-full-settle.mjs"
   },
   "keywords": [
     "usdc",
@@ -27,8 +31,10 @@
     "agent"
   ],
   "license": "MIT",
-  "dependencies": {},
   "optionalDependencies": {
-    "viem": "^2.21.0"
+    "viem": "^2.53.1"
+  },
+  "devDependencies": {
+    "solc": "^0.8.24"
   }
 }

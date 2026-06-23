@@ -6,9 +6,12 @@
 // Owncast watch-second or a Mastodon boost; only the source adapter changes.
 //
 //   • mock — deterministic synthetic tx hashes, escrow bookkeeping, no chain.
-//   • real — builds one EIP-3009 TransferWithAuthorization per payee and submits
-//            a batch to Circle's Gateway nanopayments endpoint on Arc. Loaded
-//            via dynamic import so `viem` is only required in live mode.
+//   • real (Arc native) — calls CadenceSplitterArc.settle() directly on Arc
+//            Testnet where USDC is the native gas token. Each batch is a single
+//            on-chain transaction that pays wallet-holders and escrows the rest.
+//   • real (Circle Gateway) — builds EIP-3009 TransferWithAuthorization per
+//            payee and submits a batch to Circle's Gateway nanopayments endpoint.
+//            Used when CADENCE_USDC_ADDRESS is a real ERC-20 address.
 // -----------------------------------------------------------------------------
 
 import { createHash } from 'node:crypto';
@@ -23,6 +26,38 @@ function synthHash(seed) {
 function batchIdFor(ts) {
   return 'batch_' + Math.floor(ts / 10000);
 }
+
+// ── CadenceSplitterArc minimal ABI ───────────────────────────────────────────
+const SPLITTER_ARC_ABI = [
+  {
+    type: 'function', name: 'settle', stateMutability: 'payable',
+    inputs: [
+      { name: 'batchId', type: 'bytes32' },
+      { name: 'payouts', type: 'tuple[]', components: [
+        { name: 'payee', type: 'address' },
+        { name: 'identityHash', type: 'bytes32' },
+        { name: 'amount', type: 'uint256' },
+      ]},
+    ],
+    outputs: [],
+  },
+  {
+    type: 'function', name: 'available', stateMutability: 'view',
+    inputs: [], outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    type: 'function', name: 'totalPaid', stateMutability: 'view',
+    inputs: [], outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    type: 'function', name: 'totalEscrow', stateMutability: 'view',
+    inputs: [], outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    type: 'function', name: 'batchCount', stateMutability: 'view',
+    inputs: [], outputs: [{ name: '', type: 'uint256' }],
+  },
+];
 
 /**
  * @param {number} amountUsd  total to distribute across payees
@@ -46,6 +81,9 @@ export async function settle(amountUsd, payees, ts) {
   });
 
   if (config.isReal) {
+    if (config.nativeUsdc) {
+      return settleArcNative(amountUsd, splits, payees, ts, batchId);
+    }
     return settleReal(amountUsd, splits, payees, ts, batchId);
   }
 
@@ -66,9 +104,96 @@ export async function settle(amountUsd, payees, ts) {
 }
 
 /**
- * LIVE settlement on Arc via Circle Gateway. Kept self-contained and only
- * reached when CADENCE_SETTLEMENT_MODE=real. Throws a helpful error if the
- * operator hasn't supplied the required configuration.
+ * LIVE settlement on Arc Testnet via CadenceSplitterArc contract.
+ * USDC is the native gas token, so we call settle() with msg.value.
+ */
+async function settleArcNative(amountUsd, splits, payees, ts, batchId) {
+  const missing = [];
+  if (!config.rpcUrl) missing.push('CADENCE_RPC_URL');
+  if (!config.splitterAddress) missing.push('CADENCE_SPLITTER_ADDRESS');
+  if (!config.operatorKey) missing.push('CADENCE_OPERATOR_PRIVATE_KEY');
+  if (missing.length) {
+    throw new Error(
+      `LIVE settlement requires: ${missing.join(', ')}. ` +
+      'Set them in .env or switch CADENCE_SETTLEMENT_MODE=mock.',
+    );
+  }
+
+  const { createWalletClient, createPublicClient, http, parseUnits } = await import('viem');
+  const { privateKeyToAccount } = await import('viem/accounts');
+
+  const account = privateKeyToAccount(config.operatorKey);
+  const publicClient = createPublicClient({ transport: http(config.rpcUrl) });
+  const walletClient = createWalletClient({ account, transport: http(config.rpcUrl) });
+
+  // Build payout structs: wallet holders get paid, escrow ones get address(0)
+  // Arc Testnet native token uses 18 decimals (not 6 like standard USDC)
+  const payouts = splits
+    .filter(s => s.amountUsd > 0)
+    .map(s => ({
+      payee: s.escrowed ? '0x0000000000000000000000000000000000000000' : s.wallet,
+      identityHash: s.identityHash.padEnd(66, '0').slice(0, 66), // ensure bytes32
+      amount: parseUnits(String(s.amountUsd), 18), // Arc native: 18 decimals
+    }));
+
+  if (payouts.length === 0) {
+    // Nothing to settle on-chain (all zero amounts)
+    let escrowedUsd = 0, paidUsd = 0;
+    for (const s of splits) {
+      if (s.escrowed) { escrowedUsd += s.amountUsd; store.addEscrow(s.identityHash, s.name, null, s.amountUsd); }
+      else paidUsd += s.amountUsd;
+    }
+    store.bumpOperators(1);
+    return { batchId, txHash: synthHash(batchId), mode: 'real', splits, escrowedUsd: Number(escrowedUsd.toFixed(6)), paidUsd: Number(paidUsd.toFixed(6)) };
+  }
+
+  // Total value to send = sum of all payout amounts
+  const totalValue = payouts.reduce((sum, p) => sum + p.amount, 0n);
+
+  // Convert batchId to bytes32
+  const batchIdBytes32 = ('0x' + Buffer.from(batchId).toString('hex').padEnd(64, '0')).slice(0, 66);
+
+  // Call settle() on the contract
+  const txHash = await walletClient.writeContract({
+    address: config.splitterAddress,
+    abi: SPLITTER_ARC_ABI,
+    functionName: 'settle',
+    args: [batchIdBytes32, payouts],
+    value: totalValue,
+  });
+
+  // Wait for confirmation
+  const receipt = await publicClient.waitForTransactionReceipt({ hash: txHash });
+
+  // Update ledger
+  let escrowedUsd = 0;
+  let paidUsd = 0;
+  for (const s of splits) {
+    if (s.escrowed) {
+      escrowedUsd += s.amountUsd;
+      store.addEscrow(s.identityHash, s.name, payees.find((p) => p.identityHash === s.identityHash)?.mbid, s.amountUsd);
+    } else {
+      paidUsd += s.amountUsd;
+    }
+  }
+  store.bumpOperators(1);
+
+  return {
+    batchId,
+    txHash,
+    mode: 'real',
+    splits,
+    escrowedUsd: Number(escrowedUsd.toFixed(6)),
+    paidUsd: Number(paidUsd.toFixed(6)),
+    blockNumber: Number(receipt.blockNumber),
+    gasUsed: receipt.gasUsed.toString(),
+    explorer: `https://testnet.arcscan.app/tx/${txHash}`,
+  };
+}
+
+/**
+ * LIVE settlement on Arc via Circle Gateway (EIP-3009 path).
+ * Used when CADENCE_USDC_ADDRESS is a real ERC-20 address (not native).
  */
 async function settleReal(amountUsd, splits, payees, ts, batchId) {
   const missing = [];

@@ -98,21 +98,52 @@ the build is wrong.
 ## How it uses the Circle stack
 
 - **USDC on Arc** — the settlement asset, paid in nanopayment-sized amounts.
-- **Circle Gateway / nanopayments** — in LIVE mode, paid artists are settled as a
-  single batch of EIP-3009 `TransferWithAuthorization` authorizations submitted to
-  Gateway. (`src/core/settlement.js`)
+  On Arc Testnet, USDC is the native gas token (18 decimals).
+- **CadenceSplitterArc** — on-chain settlement contract deployed at
+  [`0x5bf261603745b2b5d541e7face3020cdfd59f011`](https://testnet.arcscan.app/address/0x5bf261603745b2b5d541e7face3020cdfd59f011)
+  on Arc Testnet. Pays artists with wallets, escrows the rest.
+- **Circle Gateway / nanopayments** — in LIVE mode with ERC-20 USDC, paid artists
+  are settled as EIP-3009 `TransferWithAuthorization` batches submitted to Gateway.
+  (`src/core/settlement.js`)
 - **Agent / programmable wallets** — the settlement operator signs and submits on
   the agent's behalf; artists receive to their own wallets from the registry.
 - **x402** — two endpoints (`/api/royalty-data`, `/api/claim`) implement the
   HTTP 402 payment-required handshake: a challenge with an `accepts[]` quote, then
   release on a presented `X-PAYMENT`. (`server.mjs`)
 - **ERC-8004 identity** — escrow for artists with no wallet is keyed by a stable
-  identity hash; `CadenceSplitter.claim()` releases it only to the address that
-  controls that identity per an ERC-8004 registry. (`contracts/CadenceSplitter.sol`)
+  identity hash; `CadenceSplitterArc.claim()` releases it only to the address that
+  controls that identity per the IdentityRegistry at
+  `0x8004A818BFB912233c491871b3d84c89A494BD9e`. (`contracts/CadenceSplitterArc.sol`)
 
 LIVE mode is fully wired and env-gated. The repo ships in MOCK so a reviewer can
 click around immediately; flip `CADENCE_SETTLEMENT_MODE=real` with the keys in
 `.env.example` to settle on testnet. See **[PREREQUISITES.md](./PREREQUISITES.md)**.
+
+## Live settlement proof (Arc Testnet)
+
+Cadence has completed a full LIVE settlement on Arc Testnet:
+
+```
+44 plays processed
+37 settled   → $0.074000 paid to artists on-chain
+2  escrowed  → $0.005000 held (Radiohead, Sofia Reyes Quartet — no wallets)
+5  rejected  → 4 wash-trading + 1 skip detected and withheld
+
+18 artists · 4 listeners · 39 batches
+```
+
+**On-chain evidence:**
+- Contract: [`0x5bf261...f011`](https://testnet.arcscan.app/address/0x5bf261603745b2b5d541e7face3020cdfd59f011)
+- Deploy tx: [`0xe77ef8...7304`](https://testnet.arcscan.app/tx/0xe77ef82c97726f8154dd4bef9e9116b5b67f1ae79db8d277ee5b52a5116c7304)
+- Fund tx: [`0x2ba0b7...811`](https://testnet.arcscan.app/tx/0x2ba0b7e7814f7a9e299b71d0379dfd14bb90b435bc43603cf829cc15afe7c811)
+- Sample settlement txs:
+  [1](https://testnet.arcscan.app/tx/0x7d34e6a5c3a139f3f387b309966212c7540442cd32c0029798522b3a74fcb0e7)
+  [2](https://testnet.arcscan.app/tx/0xcaf301b8ca84eb5ad3e868e92eee68f393181153ff7f93b28efcedbb33ef7b99)
+  [3](https://testnet.arcscan.app/tx/0x0654ab5dd267978cf765b9adcaf9ac66c70b87fdd5726b8d1f7ee735041193b5)
+
+Artist wallets received real USDC:
+- Wallet `0xe6aa...3925`: +$0.081 (Glenn Gould, Dua Lipa, The Beatles, Aurora Bloom, Lena Ostergaard, Cadence Allstars)
+- Wallet `0xe00d...6fbf`: +$0.014 (Solour, Kwame Mensah, writers, producers)
 
 ## Build once, distribute three ways
 
@@ -142,14 +173,22 @@ adapters → [ resolveMetadata · assessFraud · resolvePayees · mapWallets · 
 ## Project layout
 
 ```
-server.mjs            zero-dependency http server (static + JSON + SSE + x402)
-src/core/             the agent: pipeline, brain, fraud, registry, budget, settlement
-src/core/adapters/    subsonic (live) · owncast · mastodon  (source-agnostic)
-public/               the dashboard — no framework, no build, no browser storage
-contracts/            CadenceSplitter.sol — on-chain splitter + escrow + claim
-scripts/              verify-core (assertions) · simulate-plays (paced replay)
-data/                 bundled metadata cache, payee registry, seed plays
-docs/                 architecture deep dive
+server.mjs                  zero-dependency http server (static + JSON + SSE + x402)
+src/core/                   the agent: pipeline, brain, fraud, registry, budget, settlement
+src/core/adapters/          subsonic (live) · owncast · mastodon  (source-agnostic)
+public/                     the dashboard — no framework, no build, no browser storage
+contracts/
+  CadenceSplitter.sol       original splitter (ERC-20 USDC, for Circle Gateway path)
+  CadenceSplitterArc.sol    Arc Testnet splitter (native USDC, deployed live)
+scripts/
+  verify-core.mjs           26 assertions across 9 hard cases + ledger invariants
+  simulate-plays.mjs        paced terminal replay
+  deploy.mjs                compile + deploy CadenceSplitterArc to Arc Testnet
+  fund-contract.mjs         send native USDC to the splitter contract
+  live-settle.mjs           run a small LIVE settlement batch
+  live-full-settle.mjs      run the full seed through LIVE settlement
+data/                       bundled metadata cache, payee registry, seed plays
+docs/                       architecture deep dive
 ```
 
 ## Requirements
